@@ -15,7 +15,7 @@ const TaskColumn = ({ title, tasks, id, onEdit, onDelete, onView }) => {
           >
             {tasks.map((task, index) => (
               <TaskCard 
-                key={task._id} 
+                key={task.id} 
                 task={task} 
                 index={index}
                 onDelete={onDelete}

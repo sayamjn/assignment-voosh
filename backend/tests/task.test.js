@@ -118,7 +118,7 @@ describe('Task API', () => {
       };
 
       const response = await request(app)
-        .patch(`/api/tasks/${task._id}`)
+        .patch(`/api/tasks/${task.id}`)
         .set('Authorization', `Bearer ${token}`)
         .send(updates);
 
@@ -129,7 +129,7 @@ describe('Task API', () => {
 
     it('should update task status', async () => {
       const response = await request(app)
-        .patch(`/api/tasks/${task._id}/status`)
+        .patch(`/api/tasks/${task.id}/status`)
         .set('Authorization', `Bearer ${token}`)
         .send({ status: 'inProgress' });
 

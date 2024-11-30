@@ -74,7 +74,7 @@ const Dashboard = () => {
       const updatedTasks = { ...tasks };
 
       Object.keys(tasks).forEach((status) => {
-        updatedTasks[status] = tasks[status].filter((t) => t._id !== taskId);
+        updatedTasks[status] = tasks[status].filter((t) => t.id !== taskId);
       });
 
       updatedTasks[updatedTask.status].push(updatedTask);
@@ -92,7 +92,7 @@ const Dashboard = () => {
       const updatedTasks = { ...tasks };
 
       Object.keys(tasks).forEach((status) => {
-        updatedTasks[status] = tasks[status].filter((t) => t._id !== taskId);
+        updatedTasks[status] = tasks[status].filter((t) => t.id !== taskId);
       });
 
       setTasks(updatedTasks);
@@ -309,7 +309,7 @@ const Dashboard = () => {
         }}
         onSubmit={
           selectedTask
-            ? (data) => handleUpdateTask(selectedTask._id, data)
+            ? (data) => handleUpdateTask(selectedTask.id, data)
             : handleCreateTask
         }
         task={selectedTask}
@@ -321,7 +321,7 @@ const Dashboard = () => {
           setIsDeleteModalOpen(false);
           setSelectedTask(null);
         }}
-        onConfirm={() => handleDeleteTask(selectedTask?._id)}
+        onConfirm={() => handleDeleteTask(selectedTask?.id)}
         taskTitle={selectedTask?.title}
       />
 
