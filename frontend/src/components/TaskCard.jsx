@@ -77,6 +77,16 @@ const TaskCard = ({ task, onDelete, onEdit, onView }) => {
           >
             Edit
           </button>
+          <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onView(task);
+                }}
+                className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 transition-colors"
+              >
+                View Details
+              </button>
         </div>
       </div>
     </div>
