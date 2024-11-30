@@ -9,6 +9,7 @@ const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/tasks");
 const userRoutes = require("./routes/users");
 const { errorHandler } = require("./middleware/errorHandler");
+const path = require("path");
 
 const app = express();
 
