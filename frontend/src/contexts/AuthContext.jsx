@@ -78,8 +78,23 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateProfile = async (profileData) => {
+    try {
+      const response = await api.patch('/auth/profile', profileData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      setUser(response.data.user);
+      return response.data;
+    } catch (error) {
+      console.error('Profile update error:', error);
+      throw error;
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, googleLogin, signup, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, googleLogin, signup, logout, updateProfile }}>
       {!loading && children}
     </AuthContext.Provider>
   );
