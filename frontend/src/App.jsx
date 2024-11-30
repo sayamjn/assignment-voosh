@@ -1,20 +1,26 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { AuthProvider } from './contexts/AuthContext';
-import { useAuth } from './contexts/AuthContext';
-import Dashboard from './pages/Dashboard';
-import Login from './components/auth/Login';
-import Signup from './components/auth/Signup';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { AuthProvider } from "./contexts/AuthContext";
+import { useAuth } from "./contexts/AuthContext";
+import Dashboard from "./pages/Dashboard";
+import Login from "./components/auth/Login";
+import Signup from "./components/auth/Signup";
+import "./App.css";
+import Profile from "./pages/Profile";
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return <div>Loading...</div>;
   }
-  
+
   return user ? children : <Navigate to="/login" />;
 };
 
@@ -31,6 +37,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <Dashboard />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute>
+                  <Profile />
                 </PrivateRoute>
               }
             />
