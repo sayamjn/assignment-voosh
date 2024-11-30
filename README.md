@@ -7,6 +7,7 @@ assignment-voosh
 │  ├─ config
 │  │  └─ passport.js
 │  ├─ index.js
+│  ├─ jest.config.js
 │  ├─ middleware
 │  │  ├─ auth.js
 │  │  ├─ errorHandler.js
@@ -16,10 +17,14 @@ assignment-voosh
 │  │  └─ User.js
 │  ├─ package-lock.json
 │  ├─ package.json
-│  └─ routes
-│     ├─ auth.js
-│     ├─ tasks.js
-│     └─ users.js
+│  ├─ routes
+│  │  ├─ auth.js
+│  │  ├─ tasks.js
+│  │  └─ users.js
+│  └─ tests
+│     ├─ setup.js
+│     ├─ task.test.js
+│     └─ testUtils.js
 └─ frontend
    ├─ .env
    ├─ README.md
@@ -48,7 +53,8 @@ assignment-voosh
    │  ├─ index.css
    │  ├─ main.jsx
    │  ├─ pages
-   │  │  └─ Dashboard.jsx
+   │  │  ├─ Dashboard.jsx
+   │  │  └─ Profile.jsx
    │  └─ services
    │     ├─ api.js
    │     └─ taskService.js

@@ -33,29 +33,41 @@ const taskSchema = new mongoose.Schema({
     type: String,
     trim: true
   }],
-  isOverdue: {
-    type: Boolean,
-    default: false
-  },
   completedAt: {
     type: Date
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: { 
+    virtuals: true,
+    transform: function(doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+      delete ret.__v;
+      return ret;
+    }
+  }
 });
 
+// Indexes
 taskSchema.index({ userId: 1, status: 1 });
 taskSchema.index({ dueDate: 1 });
 
+// Pre-save middleware
 taskSchema.pre('save', function(next) {
-  if (this.dueDate && this.dueDate < new Date()) {
-    this.isOverdue = true;
-  }
   if (this.status === 'done' && !this.completedAt) {
     this.completedAt = new Date();
   }
   next();
 });
+
+// Virtual for isOverdue
+taskSchema.virtual('isOverdue').get(function() {
+  if (!this.dueDate) return false;
+  return new Date(this.dueDate) < new Date();
+});
+
+
 
 const Task = mongoose.model('Task', taskSchema);
 module.exports = Task;

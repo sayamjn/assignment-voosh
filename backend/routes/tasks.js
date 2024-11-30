@@ -6,6 +6,22 @@ const Task = require('../models/Task');
 
 const router = express.Router();
 
+router.get('/overdue', auth, async (req, res, next) => {
+    try {
+      const currentDate = new Date();
+      const tasks = await Task.find({
+        userId: req.user._id,
+        dueDate: { $lt: currentDate },
+        status: { $ne: 'done' }
+      });
+      
+      res.json(tasks);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+
 router.get('/', auth, async (req, res, next) => {
   try {
     const tasks = await Task.find({ userId: req.user._id });
@@ -17,8 +33,6 @@ router.get('/', auth, async (req, res, next) => {
 
 router.post('/', [auth], async (req, res, next) => {
     try {
-      console.log('Creating task for user:', req.user._id);
-      console.log('Task data:', req.body);
   
       const task = await Task.create({
         ...req.body,
