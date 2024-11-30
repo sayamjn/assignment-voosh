@@ -1,7 +1,7 @@
 {
   "name": "assignment-voosh",
   "version": "1.0.0",
-  "description": "``` assignment-voosh ├─ README.md ├─ backend │  ├─ .env │  ├─ config │  │  └─ passport.js │  ├─ index.js │  ├─ jest.config.js │  ├─ middleware │  │  ├─ auth.js │  │  ├─ errorHandler.js │  │  └─ validate.js │  ├─ models │  │  ├─ Task.js │  │  └─ User.js │  ├─ package-lock.json │  ├─ package.json │  ├─ routes │  │  ├─ auth.js │  │  ├─ tasks.js │  │  └─ users.js │  └─ tests │     ├─ setup.js │     ├─ task.test.js │     └─ testUtils.js └─ frontend    ├─ .env    ├─ README.md    ├─ eslint.config.js    ├─ index.html    ├─ package-lock.json    ├─ package.json    ├─ postcss.config.js    ├─ public    │  └─ vite.svg    ├─ src    │  ├─ App.css    │  ├─ App.jsx    │  ├─ components    │  │  ├─ DeleteConfirmation.jsx    │  │  ├─ TaskCard.jsx    │  │  ├─ TaskColumn.jsx    │  │  ├─ TaskDetails.jsx    │  │  ├─ auth    │  │  │  ├─ Login.jsx    │  │  │  └─ Signup.jsx    │  │  └─ modals    │  │     └─ TaskModal.jsx    │  ├─ contexts    │  │  └─ AuthContext.jsx    │  ├─ index.css    │  ├─ main.jsx    │  ├─ pages    │  │  ├─ Dashboard.jsx    │  │  └─ Profile.jsx    │  └─ services    │     ├─ api.js    │     └─ taskService.js    ├─ tailwind.config.js    └─ vite.config.js",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node backend/index.js",
@@ -10,8 +10,27 @@
     "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.5.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "express-validator": "^7.2.0",
+    "google-auth-library": "^9.15.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-jwt": "^4.0.1"
+  },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.7",
+    "supertest": "^7.0.0"
   },
   "keywords": [],
   "author": "",
