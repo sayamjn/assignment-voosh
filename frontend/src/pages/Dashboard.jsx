@@ -20,6 +20,8 @@ const Dashboard = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState('recent');
   
   const { logout } = useAuth();
   const navigate = useNavigate();
@@ -56,6 +58,7 @@ const Dashboard = () => {
         ...tasks,
         [newTask.status]: [...tasks[newTask.status], newTask]
       });
+      setIsTaskModalOpen(false);
     } catch (err) {
       setError('Failed to create task');
     }
@@ -73,6 +76,7 @@ const Dashboard = () => {
       updatedTasks[updatedTask.status].push(updatedTask);
       
       setTasks(updatedTasks);
+      setIsTaskModalOpen(false);
     } catch (err) {
       setError('Failed to update task');
     }
@@ -138,6 +142,26 @@ const Dashboard = () => {
     }
   };
 
+  const filterTasks = (taskList) => {
+    return taskList.filter(task => 
+      task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+
+  const sortTasks = (taskList) => {
+    const sortedTasks = [...taskList];
+    if (sortBy === 'recent') {
+      sortedTasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    }
+    return sortedTasks;
+  };
+
+  const getProcessedTasks = (status) => {
+    const filtered = filterTasks(tasks[status] || []);
+    return sortTasks(filtered);
+  };
+
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
@@ -148,7 +172,7 @@ const Dashboard = () => {
         <div className="text-white text-2xl font-semibold">Task Manager</div>
         <button
           onClick={handleLogout}
-          className="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-gray-100"
+          className="bg-white text-blue-600 px-4 py-2 rounded hover:bg-gray-100"
         >
           Logout
         </button>
@@ -166,16 +190,38 @@ const Dashboard = () => {
             setSelectedTask(null);
             setIsTaskModalOpen(true);
           }}
-          className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 mb-8"
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           Add Task
         </button>
+
+        <div className="flex justify-between items-center my-4">
+          <div className="w-64">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <span>Sort By:</span>
+            <select 
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="recent">Recent</option>
+            </select>
+          </div>
+        </div>
         
-        <div className="flex gap-8 overflow-x-auto pb-4">
+        <div className="flex gap-8 mt-4">
           <DragDropContext onDragEnd={onDragEnd}>
             <TaskColumn
               title="TODO"
-              tasks={tasks.todo}
+              tasks={getProcessedTasks('todo')}
               id="todo"
               onEdit={(task) => {
                 setSelectedTask(task);
@@ -192,7 +238,7 @@ const Dashboard = () => {
             />
             <TaskColumn
               title="IN PROGRESS"
-              tasks={tasks.inProgress}
+              tasks={getProcessedTasks('inProgress')}
               id="inProgress"
               onEdit={(task) => {
                 setSelectedTask(task);
@@ -209,7 +255,7 @@ const Dashboard = () => {
             />
             <TaskColumn
               title="DONE"
-              tasks={tasks.done}
+              tasks={getProcessedTasks('done')}
               id="done"
               onEdit={(task) => {
                 setSelectedTask(task);
@@ -230,7 +276,10 @@ const Dashboard = () => {
 
       <TaskModal
         isOpen={isTaskModalOpen}
-        onClose={() => setIsTaskModalOpen(false)}
+        onClose={() => {
+          setIsTaskModalOpen(false);
+          setSelectedTask(null);
+        }}
         onSubmit={selectedTask ? 
           (data) => handleUpdateTask(selectedTask._id, data) : 
           handleCreateTask
@@ -240,14 +289,20 @@ const Dashboard = () => {
 
       <DeleteConfirmation
         isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setSelectedTask(null);
+        }}
         onConfirm={() => handleDeleteTask(selectedTask?._id)}
         taskTitle={selectedTask?.title}
       />
 
       <TaskDetails
         isOpen={isDetailsModalOpen}
-        onClose={() => setIsDetailsModalOpen(false)}
+        onClose={() => {
+          setIsDetailsModalOpen(false);
+          setSelectedTask(null);
+        }}
         task={selectedTask}
       />
     </div>

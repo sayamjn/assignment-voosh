@@ -14,6 +14,12 @@ const TaskModal = ({ isOpen, onClose, onSubmit, task = null }) => {
         description: task.description || '',
         status: task.status || 'todo'
       });
+    } else {
+      setFormData({
+        title: '',
+        description: '',
+        status: 'todo'
+      });
     }
   }, [task]);
 

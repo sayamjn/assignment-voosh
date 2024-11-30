@@ -28,12 +28,6 @@ const TaskDetails = ({ isOpen, onClose, task }) => {
             <p className="mt-1 capitalize">{task.status}</p>
           </div>
 
-          {task.priority && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-700">Priority</h3>
-              <p className="mt-1 capitalize">{task.priority}</p>
-            </div>
-          )}
 
           <div>
             <h3 className="text-sm font-medium text-gray-700">Created At</h3>

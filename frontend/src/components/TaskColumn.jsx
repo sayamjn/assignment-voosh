@@ -4,8 +4,8 @@ import TaskCard from './TaskCard';
 
 const TaskColumn = ({ title, tasks, id, onEdit, onDelete, onView }) => {
   return (
-    <div className="bg-gray-100 p-4 rounded-lg w-80">
-      <h2 className="text-xl font-bold mb-4">{title}</h2>
+    <div className="flex-1 bg-blue-100 rounded-lg p-4">
+      <h2 className="text-xl font-bold mb-4 bg-blue-500 text-white p-2 rounded-lg">{title}</h2>
       <Droppable droppableId={id}>
         {(provided) => (
           <div
