@@ -12,37 +12,58 @@ const generateToken = (user) => {
   return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 };
 
-router.post('/signup', [
-  body('firstName').trim().notEmpty().withMessage('First name is required'),
-  body('lastName').trim().notEmpty().withMessage('Last name is required'),
-  body('email').isEmail().withMessage('Must be a valid email'),
-  body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
-], validate, async (req, res, next) => {
-  try {
-    const { firstName, lastName, email, password } = req.body;
-
-    if (await User.findOne({ email })) {
-      return res.status(400).json({ message: 'Email already registered' });
+router.post('/signup', async (req, res, next) => {
+    try {
+      console.log('Received signup request body:', {
+        ...req.body,
+        password: '[REDACTED]'
+      });
+  
+      const { firstName, lastName, email, password } = req.body;
+  
+      // Check if user exists
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        console.log('User already exists with email:', email);
+        return res.status(400).json({ 
+          message: 'Email already registered'
+        });
+      }
+  
+      // Create new user
+      console.log('Creating new user...');
+      const user = await User.create({
+        firstName,
+        lastName,
+        email,
+        password
+      });
+  
+      console.log('User created successfully:', {
+        id: user._id,
+        email: user.email
+      });
+  
+      // Generate token
+      const token = generateToken(user);
+  
+      // Send response
+      res.status(201).json({
+        message: 'User created successfully',
+        user: user.toJSON(),
+        token
+      });
+    } catch (error) {
+      console.error('Error in signup:', {
+        error: error.message,
+        stack: error.stack
+      });
+      next(error);
     }
+  });
+  
 
-    const user = await User.create({
-      firstName,
-      lastName,
-      email,
-      password
-    });
-
-    const token = generateToken(user);
-    res.status(201).json({ user, token });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.post('/login', [
-  body('email').isEmail().withMessage('Must be a valid email'),
-  body('password').notEmpty().withMessage('Password is required')
-], validate, async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });

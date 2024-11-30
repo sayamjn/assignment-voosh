@@ -15,31 +15,25 @@ router.get('/', auth, async (req, res, next) => {
   }
 });
 
-router.post('/', [
-  auth,
-  body('title').trim().notEmpty().withMessage('Title is required'),
-  body('description').trim().notEmpty().withMessage('Description is required'),
-  body('status').isIn(['todo', 'inProgress', 'done']).withMessage('Invalid status'),
-  body('priority').optional().isIn(['low', 'medium', 'high']).withMessage('Invalid priority')
-], validate, async (req, res, next) => {
-  try {
-    const task = await Task.create({
-      ...req.body,
-      userId: req.user._id
-    });
-    res.status(201).json(task);
-  } catch (error) {
-    next(error);
-  }
-});
+router.post('/', [auth], async (req, res, next) => {
+    try {
+      console.log('Creating task for user:', req.user._id);
+      console.log('Task data:', req.body);
+  
+      const task = await Task.create({
+        ...req.body,
+        userId: req.user._id
+      });
+  
+      console.log('Task created:', task);
+      res.status(201).json(task);
+    } catch (error) {
+      console.error('Error creating task:', error);
+      next(error);
+    }
+  });
 
-router.patch('/:id', [
-  auth,
-  body('title').optional().trim().notEmpty().withMessage('Title cannot be empty'),
-  body('description').optional().trim().notEmpty().withMessage('Description cannot be empty'),
-  body('status').optional().isIn(['todo', 'inProgress', 'done']).withMessage('Invalid status'),
-  body('priority').optional().isIn(['low', 'medium', 'high']).withMessage('Invalid priority')
-], validate, async (req, res, next) => {
+router.patch('/:id',[auth], async (req, res, next) => {
   try {
     const task = await Task.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
@@ -76,8 +70,7 @@ router.delete('/:id', auth, async (req, res, next) => {
 
 router.patch('/:id/status', [
   auth,
-  body('status').isIn(['todo', 'inProgress', 'done']).withMessage('Invalid status')
-], validate, async (req, res, next) => {
+], async (req, res, next) => {
   try {
     const task = await Task.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
