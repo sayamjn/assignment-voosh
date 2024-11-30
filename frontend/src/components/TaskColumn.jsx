@@ -1,32 +1,41 @@
 import React from 'react';
-import { Droppable } from 'react-beautiful-dnd';
+import { useDrop } from 'react-dnd';
 import TaskCard from './TaskCard';
 
-const TaskColumn = ({ title, tasks, id, onEdit, onDelete, onView }) => {
+const TaskColumn = ({ title, tasks, status, onUpdateTaskStatus, onEdit, onDelete, onView }) => {
+  const [{ isOver }, drop] = useDrop(() => ({
+    accept: 'TASK',
+    drop: (item) => {
+      if (item.originalStatus !== status) {
+        onUpdateTaskStatus(item.id, status);
+      }
+    },
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+
   return (
-    <div className="flex-1 bg-blue-100 rounded-lg p-4">
-      <h2 className="text-xl font-bold mb-4 bg-blue-500 text-white p-2 rounded-lg">{title}</h2>
-      <Droppable droppableId={id}>
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="min-h-[200px]"
-          >
-            {tasks.map((task, index) => (
-              <TaskCard 
-                key={task.id} 
-                task={task} 
-                index={index}
-                onDelete={onDelete}
-                onEdit={onEdit}
-                onView={onView}
-              />
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
+    <div 
+      ref={drop}
+      className={`flex-1 bg-blue-100 rounded-lg p-4 min-w-[300px] ${
+        isOver ? 'bg-blue-200' : ''
+      }`}
+    >
+      <h2 className="text-xl font-bold mb-4 bg-blue-500 text-white p-2 rounded-lg select-none">
+        {title}
+      </h2>
+      <div className="min-h-[200px] space-y-2">
+        {tasks.map((task) => (
+          <TaskCard 
+            key={task.id} 
+            task={task}
+            onDelete={onDelete}
+            onEdit={onEdit}
+            onView={onView}
+          />
+        ))}
+      </div>
     </div>
   );
 };
