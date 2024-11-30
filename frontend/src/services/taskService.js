@@ -49,6 +49,36 @@ export const taskService = {
       console.error('Error updating task status:', error);
       throw error;
     }
+  },
+
+  addLabel: async (taskId, label) => {
+    try {
+      const response = await api.post(`/tasks/${taskId}/labels`, { label });
+      return response.data;
+    } catch (error) {
+      console.error('Error adding label:', error);
+      throw error;
+    }
+  },
+
+  removeLabel: async (taskId, label) => {
+    try {
+      const response = await api.delete(`/tasks/${taskId}/labels/${label}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error removing label:', error);
+      throw error;
+    }
+  },
+
+  getOverdueTasks: async () => {
+    try {
+      const response = await api.get('/tasks/overdue');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching overdue tasks:', error);
+      throw error;
+    }
   }
 };
 
