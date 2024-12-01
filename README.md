@@ -1,6 +1,9 @@
 Task Management Application
-A full-stack task management application built with the MERN stack (MongoDB, Express.js, React, Node.js) featuring drag-and-drop task organization, comprehensive user authentication, and real-time updates.
+A full-stack task management application built with the MERN stack (MongoDB, Express.js, React, Node.js) featuring drag-and-drop task organization, comprehensive user authentication, and visuals.
+
+
 ✨ Features
+
 Authentication
 
 Email/Password login system
@@ -101,6 +104,7 @@ Start the Frontend Development Server
 
 cd frontend
 npm run dev
+
 The application will be available at http://localhost:5173
 
 📁 Project Structure
