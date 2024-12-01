@@ -4,12 +4,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const morgan = require("morgan");
 const passport = require("passport");
+const path = require("path");
 
 const authRoutes = require("./routes/auth");
 const taskRoutes = require("./routes/tasks");
 const userRoutes = require("./routes/users");
 const { errorHandler } = require("./middleware/errorHandler");
-const path = require("path");
 
 const app = express();
 
@@ -36,20 +36,17 @@ require("./config/passport");
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/users", userRoutes);
-
 app.use(errorHandler);
 
-if (process.env.NODE_ENV !== "test") {
-  mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => console.log("Connected to MongoDB"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
 
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 app.get("*", (req, res) =>
