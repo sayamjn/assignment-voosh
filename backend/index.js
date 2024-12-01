@@ -22,10 +22,20 @@ app.use(
       "http://localhost:5000",
     ],
     credentials: true,
-    methods: ["GET", "POST"],
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE",
+      "PATCH",
+      "OPTIONS",
+      "HEAD",
+      "TRACE",
+    ],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 
 app.use(express.json());
 app.use(morgan("dev"));
