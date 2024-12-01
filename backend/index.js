@@ -15,11 +15,15 @@ const app = express();
 
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? "https://assignment-voosh.onrender.com"
-        : ["http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: [
+      "http://localhost:5173",
+      "https://assignment-voosh.onrender.com",
+      "https://127.0.0.1:5173",
+      "http://localhost:5000",
+    ],
     credentials: true,
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
