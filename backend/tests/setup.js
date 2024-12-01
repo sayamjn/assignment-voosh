@@ -2,7 +2,7 @@ require('dotenv').config();
 
 // Set test environment variables if not already set
 process.env.NODE_ENV = 'test';
-process.env.MONGODB_URI_TEST = process.env.MONGODB_URI_TEST || 'mongodb://localhost:27017/task-management-test';
+process.env.MONGODB_URI_TEST = process.env.MONGODB_URI_TEST
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-secret';
 process.env.PORT = process.env.PORT || 5000;
 
